@@ -1,5 +1,5 @@
 ---
-// 연락처는 이메일과 링크드인만 노출한다.
+// 연락처는 이메일만 노출한다.
 // 전화번호·주소 등 개인정보는 어떤 경우에도 이 사이트에 넣지 않는다.
 const email = 'parkhm1477@gmail.com';
 const year = new Date().getFullYear();
@@ -7,12 +7,12 @@ const year = new Date().getFullYear();
 
 <footer class="border-t border-border mt-auto">
   <div
-    class="max-w-3xl mx-auto px-5 py-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+    class="max-w-3xl mx-auto px-5 py-8 flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between"
   >
-    <p class="text-sm text-muted m-0">
-      연락 —
-      <a href={`mailto:${email}`} class="text-accent underline underline-offset-4">{email}</a>
+    <p class="font-mono text-xs text-muted m-0">
+      <span class="text-faint">contact</span>
+      <a href={`mailto:${email}`} class="text-accent underline underline-offset-4 ml-2">{email}</a>
     </p>
-    <p class="text-xs text-faint m-0">© {year} 박현민</p>
+    <p class="font-mono text-2xs text-faint m-0">© {year} PARK HYUNMIN</p>
   </div>
 </footer>

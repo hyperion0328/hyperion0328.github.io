@@ -1,44 +1,50 @@
 ---
 interface Props {
+  index: number;
   href: string;
+  slug: string;
   title: string;
   tagline: string;
   period: string;
   stack: string[];
-  headline?: { value: string; label: string };
+  metrics: { label: string; value: string }[];
 }
 
-const { href, title, tagline, period, stack, headline } = Astro.props;
+const { index, href, slug, title, tagline, period, stack, metrics } = Astro.props;
+const no = String(index).padStart(3, '0');
 ---
 
-<article
-  class="border border-border rounded-[--radius-card] bg-surface p-5 transition-colors hover:border-accent"
->
-  <div class="flex items-baseline justify-between gap-3 flex-wrap">
-    <h2 class="text-lg font-semibold m-0">
-      <a href={href} class="text-fg no-underline hover:text-accent">
-        {title}
-      </a>
-    </h2>
-    <span class="text-xs text-faint whitespace-nowrap">{period}</span>
+<article class="border border-border rounded-[--radius-card] transition-colors hover:border-accent">
+  <div class="flex items-baseline justify-between gap-3 border-b border-border px-4 py-2.5">
+    <div class="flex items-baseline gap-3 min-w-0">
+      <span class="font-mono text-2xs text-faint shrink-0">{no}</span>
+      <span class="font-mono text-sm text-fg truncate">{slug}</span>
+    </div>
+    <span class="font-mono text-2xs text-faint whitespace-nowrap">{period}</span>
   </div>
 
-  <p class="text-sm text-muted mt-2 mb-0">{tagline}</p>
+  <div class="px-4 py-4">
+    <h2 class="text-lg font-semibold m-0">
+      <a href={href} class="text-fg no-underline hover:text-accent">{title}</a>
+    </h2>
+    <p class="text-sm text-muted mt-1.5 mb-0">{tagline}</p>
 
-  {
-    headline && (
-      <p class="mt-3 mb-0 text-sm">
-        <span class="font-mono text-fg font-medium">{headline.value}</span>
-        <span class="text-faint"> · {headline.label}</span>
-      </p>
-    )
-  }
-
-  <ul class="flex flex-wrap gap-1.5 list-none m-0 mt-4 p-0">
     {
-      stack.map((s) => (
-        <li class="text-xs text-muted border border-border rounded px-2 py-0.5">{s}</li>
-      ))
+      metrics.length > 0 && (
+        <dl class="mt-4 mb-0 flex flex-col gap-1">
+          {metrics.map((m) => (
+            <div class="flex items-baseline gap-3 font-mono text-xs">
+              <dt class="text-faint truncate">{m.label}</dt>
+              <span class="flex-1 border-b border-dotted border-rule translate-y-[-0.2em]" />
+              <dd class="text-fg m-0 whitespace-nowrap">{m.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )
     }
-  </ul>
+
+    <ul class="flex flex-wrap gap-x-3 gap-y-1 list-none m-0 mt-4 p-0">
+      {stack.map((s) => <li class="font-mono text-2xs text-faint">{s}</li>)}
+    </ul>
+  </div>
 </article>

@@ -14,24 +14,28 @@ const { results } = Astro.props;
 
 {/* 좁은 화면에서 표가 본문을 밀어내지 않도록 표 자체만 가로 스크롤시킨다 */}
 <div class="overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0">
-  <table class="w-full border-collapse text-sm min-w-[34rem]">
+  <table class="w-full border-collapse text-sm min-w-[36rem]">
     <caption class="sr-only">측정 지표와 각 지표의 측정 조건</caption>
     <thead>
-      <tr class="border-b border-border text-left">
-        <th scope="col" class="py-2 pr-4 font-medium text-faint text-xs">지표</th>
-        <th scope="col" class="py-2 pr-4 font-medium text-faint text-xs">값</th>
-        <th scope="col" class="py-2 font-medium text-faint text-xs">측정 조건</th>
+      <tr class="border-y border-border text-left">
+        <th scope="col" class="font-mono text-2xs font-medium text-faint py-2 pr-4 w-8">#</th>
+        <th scope="col" class="font-mono text-2xs font-medium text-faint py-2 pr-4">지표</th>
+        <th scope="col" class="font-mono text-2xs font-medium text-faint py-2 pr-4">값</th>
+        <th scope="col" class="font-mono text-2xs font-medium text-faint py-2">측정 조건</th>
       </tr>
     </thead>
     <tbody>
       {
-        results.map((r) => (
+        results.map((r, i) => (
           <tr class="border-b border-border align-top">
+            <td class="font-mono text-2xs text-faint py-3 pr-4 tabular-nums">
+              {String(i + 1).padStart(2, '0')}
+            </td>
             <th scope="row" class="py-3 pr-4 font-normal text-fg text-left">
               {r.label}
             </th>
-            <td class="py-3 pr-4 font-mono text-fg whitespace-nowrap">{r.value}</td>
-            <td class="py-3 text-muted">{r.condition}</td>
+            <td class="py-3 pr-4 font-mono text-fg whitespace-nowrap tabular-nums">{r.value}</td>
+            <td class="py-3 text-muted text-xs">{r.condition}</td>
           </tr>
         ))
       }

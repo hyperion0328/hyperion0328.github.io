@@ -16,20 +16,20 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
   <p class="text-muted mt-2 mb-0">
     각 페이지는 문제 정의 → 접근 방법 → 결과 → 배운 점 → 링크 순서로 정리했습니다.
   </p>
+  <p class="font-mono text-2xs text-faint mt-3 mb-0">{projects.length} entries</p>
 
   <div class="mt-8 flex flex-col gap-4">
     {
-      projects.map((p) => (
+      projects.map((p, i) => (
         <ProjectCard
+          index={i + 1}
           href={`/projects/${p.id}/`}
+          slug={p.id}
           title={p.data.title}
           tagline={p.data.tagline}
           period={p.data.period}
           stack={p.data.stack}
-          headline={{
-            value: p.data.results[0].value,
-            label: p.data.results[0].label,
-          }}
+          metrics={p.data.results.slice(0, 3).map((r) => ({ label: r.label, value: r.value }))}
         />
       ))
     }

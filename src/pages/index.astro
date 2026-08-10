@@ -13,29 +13,31 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
   description="컴퓨터 비전 중심의 AI/ML 프로젝트 포트폴리오. 측정 조건을 밝힌 실측 결과와 판단 근거를 남깁니다."
 >
   <section>
-    <h1 class="text-3xl font-semibold tracking-tight m-0">박현민</h1>
-    <p class="text-lg text-muted mt-3 mb-0">
+    <p class="font-mono text-2xs text-faint m-0 tracking-widest">PARK HYUNMIN</p>
+    <h1 class="text-3xl font-semibold tracking-tight mt-1 mb-0">박현민</h1>
+    <p class="font-mono text-xs text-faint mt-2 mb-0">computer vision · AI/ML</p>
+
+    <p class="text-lg text-muted mt-6 mb-0">
       컴퓨터 비전을 공부하는 AI/ML 전공생입니다. 모델을 돌려 점수를 얻는 것보다,
       <strong class="text-fg font-medium">그 점수가 어떤 조건에서 나왔고 어디서 무너지는지</strong>
       를 재는 데 시간을 씁니다.
     </p>
   </section>
 
-  <section class="mt-12">
-    <h2 class="text-xs font-medium text-faint tracking-wide uppercase m-0">프로젝트</h2>
+  <section class="mt-14">
+    <h2 class="section-label">projects</h2>
     <div class="mt-4 flex flex-col gap-4">
       {
-        projects.map((p) => (
+        projects.map((p, i) => (
           <ProjectCard
+            index={i + 1}
             href={`/projects/${p.id}/`}
+            slug={p.id}
             title={p.data.title}
             tagline={p.data.tagline}
             period={p.data.period}
             stack={p.data.stack}
-            headline={{
-              value: p.data.results[0].value,
-              label: p.data.results[0].label,
-            }}
+            metrics={p.data.results.slice(0, 3).map((r) => ({ label: r.label, value: r.value }))}
           />
         ))
       }
