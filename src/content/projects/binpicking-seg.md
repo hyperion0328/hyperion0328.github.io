@@ -50,6 +50,14 @@ learned:
   - 조기 종료 시점이 다른 학습끼리 비교하지 않습니다. 열화 증강의 이득을 +17%로 봤다가 epoch를 맞추니 +6.5%였습니다.
   - 도구는 조용히 틀립니다. 발산 감지기가 잘못된 경로 탓에 없는 파일을 보고 통과했고, 증강 라이브러리가 설치돼 있지 않아 12회 학습에 화질 증강이 한 번도 걸리지 않았는데 오류는 나지 않았습니다.
 
+figures:
+  - src: ../../assets/projects/binpicking-seg-prediction.jpg
+    alt: 왼쪽은 정답 마스크가 초록 윤곽으로 표시된 볼트·너트 사진, 오른쪽은 같은 사진에 모델이 예측한 마스크가 빨간 윤곽과 클래스 이름·신뢰도 값으로 표시된 비교 이미지.
+    caption: 근접 촬영 test 사진. 왼쪽이 정답(11개), 오른쪽이 예측(10개). 겹쳐 놓인 볼트도 개체별로 갈라진다.
+  - src: ../../assets/projects/binpicking-seg-control-misses.jpg
+    alt: 원거리 사진에서 모델이 놓친 부품들을 잘라 격자로 늘어놓은 이미지. 각 칸마다 주황색 상자와 함께 nut 6px, washer 8px, bolt 9px 처럼 클래스와 픽셀 크기가 적혀 있다.
+    caption: 대조군에서 놓친 것들. 전부 5~17px 구간에 몰려 있다 — 무너지는 문턱이 12px 부근이라는 근거다.
+
 links:
   github: https://github.com/hyperion0328/binpicking-seg
 
