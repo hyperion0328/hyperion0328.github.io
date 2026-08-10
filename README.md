@@ -6,6 +6,19 @@
 - 사용자 페이지(`<username>.github.io`)이므로 `astro.config.mjs` 에 `base` 설정이 **필요 없다.**
   프로젝트 페이지로 옮기면 `base: '/저장소이름'` 을 반드시 추가해야 CSS·이미지 경로가 살아난다.
 
+## 현재 상태 — 아직 배포되지 않는다
+
+저장소가 private 이라 GitHub Pages 자동 배포를 꺼 둔 상태다.
+Pages 는 private 저장소에서 유료 플랜을 요구하므로, 켜 두면 push 마다 배포가 실패한다.
+
+공개할 때 할 일:
+
+1. 저장소를 public 으로 전환
+2. Settings → Pages → Source 를 **GitHub Actions** 로 설정
+3. `.github/workflows/deploy.yml` 의 `push:` 트리거 주석 3줄을 해제
+
+그 전에도 `workflow_dispatch` 로 워크플로를 수동 실행해 빌드만 확인할 수 있다.
+
 ## 명령어
 
 ```bash
