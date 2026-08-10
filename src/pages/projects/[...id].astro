@@ -1,0 +1,105 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MetricTable from '../../components/MetricTable.astro';
+
+export const getStaticPaths = (async () => {
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  return projects.map((project) => ({
+    params: { id: project.id },
+    props: { project },
+  }));
+}) satisfies GetStaticPaths;
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const d = project.data;
+
+// 링크 라벨은 고정한다 — 순서도 여기에서 결정된다.
+const linkList = [
+  { key: 'github', label: 'GitHub 저장소', href: d.links.github },
+  { key: 'demo', label: '데모', href: d.links.demo },
+  { key: 'docs', label: '상세 문서', href: d.links.docs },
+].filter((l): l is { key: string; label: string; href: string } => Boolean(l.href));
+---
+
+<BaseLayout title={`${d.title} — 박현민`} description={d.tagline}>
+  <article>
+    <header>
+      <h1 class="text-2xl font-semibold tracking-tight m-0">{d.title}</h1>
+      <p class="text-muted mt-2 mb-0">{d.tagline}</p>
+
+      <dl class="mt-5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm m-0">
+        <dt class="text-faint">기간</dt>
+        <dd class="text-fg m-0">{d.period}</dd>
+        <dt class="text-faint">역할</dt>
+        <dd class="text-fg m-0">{d.role}</dd>
+        <dt class="text-faint">기술</dt>
+        <dd class="text-fg m-0">{d.stack.join(' · ')}</dd>
+      </dl>
+    </header>
+
+    {/* 1. 문제 정의 */}
+    <section class="mt-12">
+      <h2 class="text-xs font-medium text-faint tracking-wide uppercase m-0">문제 정의</h2>
+      <p class="mt-3 mb-0 text-fg">{d.problem}</p>
+    </section>
+
+    {/* 2. 접근 방법 — 본문 마크다운 */}
+    <section class="mt-12">
+      <h2 class="text-xs font-medium text-faint tracking-wide uppercase m-0">접근 방법</h2>
+      <div class="prose-body mt-3">
+        <Content />
+      </div>
+    </section>
+
+    {/* 3. 결과 — 수치는 측정 조건과 함께만 노출된다 */}
+    <section class="mt-12">
+      <h2 class="text-xs font-medium text-faint tracking-wide uppercase m-0">결과</h2>
+      <div class="mt-3">
+        <MetricTable results={d.results} />
+      </div>
+      {
+        d.resultsNote && (
+          <p class="text-sm text-muted mt-4 mb-0 border-l-2 border-border pl-3">{d.resultsNote}</p>
+        )
+      }
+    </section>
+
+    {/* 4. 배운 점 */}
+    <section class="mt-12">
+      <h2 class="text-xs font-medium text-faint tracking-wide uppercase m-0">배운 점</h2>
+      <ul class="mt-3 mb-0 flex flex-col gap-2 list-disc pl-5">
+        {d.learned.map((l) => <li class="text-muted">{l}</li>)}
+      </ul>
+    </section>
+
+    {/* 5. 링크 */}
+    <section class="mt-12">
+      <h2 class="text-xs font-medium text-faint tracking-wide uppercase m-0">링크</h2>
+      <ul class="mt-3 mb-0 flex flex-wrap gap-x-5 gap-y-2 list-none p-0">
+        {
+          linkList.map((l) => (
+            <li>
+              <a
+                href={l.href}
+                class="text-accent underline underline-offset-4 text-sm"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <nav class="mt-16 pt-6 border-t border-border">
+      <a href="/projects/" class="text-sm text-muted no-underline hover:text-fg">
+        ← 프로젝트 목록
+      </a>
+    </nav>
+  </article>
+</BaseLayout>

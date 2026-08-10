@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<BaseLayout
+  title="프로젝트 — 박현민"
+  description="컴퓨터 비전 프로젝트 목록. 각 페이지는 문제 정의, 접근 방법, 측정 조건을 밝힌 결과, 배운 점 순서로 정리했습니다."
+>
+  <h1 class="text-2xl font-semibold tracking-tight m-0">프로젝트</h1>
+  <p class="text-muted mt-2 mb-0">
+    각 페이지는 문제 정의 → 접근 방법 → 결과 → 배운 점 → 링크 순서로 정리했습니다.
+  </p>
+
+  <div class="mt-8 flex flex-col gap-4">
+    {
+      projects.map((p) => (
+        <ProjectCard
+          href={`/projects/${p.id}/`}
+          title={p.data.title}
+          tagline={p.data.tagline}
+          period={p.data.period}
+          stack={p.data.stack}
+          headline={{
+            value: p.data.results[0].value,
+            label: p.data.results[0].label,
+          }}
+        />
+      ))
+    }
+  </div>
+</BaseLayout>

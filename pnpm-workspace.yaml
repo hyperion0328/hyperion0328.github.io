@@ -1,0 +1,4 @@
+# pnpm 11 부터 설정은 package.json 이 아니라 이 파일에서 읽는다.
+# esbuild 는 설치 후 스크립트로 플랫폼별 바이너리를 준비해야 Astro 빌드가 돈다.
+allowBuilds:
+  esbuild: true

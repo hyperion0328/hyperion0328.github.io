@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<BaseLayout
+  title="박현민 — AI/ML 포트폴리오"
+  description="컴퓨터 비전 중심의 AI/ML 프로젝트 포트폴리오. 측정 조건을 밝힌 실측 결과와 판단 근거를 남깁니다."
+>
+  <section>
+    <h1 class="text-3xl font-semibold tracking-tight m-0">박현민</h1>
+    <p class="text-lg text-muted mt-3 mb-0">
+      컴퓨터 비전을 공부하는 AI/ML 전공생입니다. 모델을 돌려 점수를 얻는 것보다,
+      <strong class="text-fg font-medium">그 점수가 어떤 조건에서 나왔고 어디서 무너지는지</strong>
+      를 재는 데 시간을 씁니다.
+    </p>
+  </section>
+
+  <section class="mt-12">
+    <h2 class="text-xs font-medium text-faint tracking-wide uppercase m-0">프로젝트</h2>
+    <div class="mt-4 flex flex-col gap-4">
+      {
+        projects.map((p) => (
+          <ProjectCard
+            href={`/projects/${p.id}/`}
+            title={p.data.title}
+            tagline={p.data.tagline}
+            period={p.data.period}
+            stack={p.data.stack}
+            headline={{
+              value: p.data.results[0].value,
+              label: p.data.results[0].label,
+            }}
+          />
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
