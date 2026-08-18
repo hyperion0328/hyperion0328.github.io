@@ -10,41 +10,41 @@ interface Props {
   metrics: { label: string; value: string }[];
 }
 
-const { index, href, slug, title, tagline, period, stack, metrics } = Astro.props;
-const no = String(index).padStart(3, '0');
+const { href, slug, title, tagline, period, stack, metrics } = Astro.props;
 ---
 
-<article class="border border-border rounded-[--radius-card] transition-colors hover:border-accent">
-  <div class="flex items-baseline justify-between gap-3 border-b border-border px-4 py-2.5">
-    <div class="flex items-baseline gap-3 min-w-0">
-      <span class="font-mono text-2xs text-faint shrink-0">{no}</span>
-      <span class="font-mono text-sm text-fg truncate">{slug}</span>
-    </div>
-    <span class="font-mono text-2xs text-faint whitespace-nowrap">{period}</span>
+{/* MiniMax card-base — 평평한 흰 카드, 16px 모서리, 1px 헤어라인 (elevation 0) */}
+<article class="card transition-colors hover:border-ink">
+  <div class="flex items-baseline justify-between gap-3">
+    <p class="section-label m-0">{slug}</p>
+    <p class="text-micro text-stone m-0 whitespace-nowrap">{period}</p>
   </div>
 
-  <div class="px-4 py-4">
-    <h2 class="text-lg font-semibold m-0">
-      <a href={href} class="text-fg no-underline hover:text-accent">{title}</a>
-    </h2>
-    <p class="text-sm text-muted mt-1.5 mb-0">{tagline}</p>
+  <h2 class="text-card font-semibold tracking-tight mt-3 mb-0">
+    <a href={href} class="text-ink no-underline">{title}</a>
+  </h2>
+  <p class="text-sm text-slate mt-2 mb-0">{tagline}</p>
 
+  {
+    metrics.length > 0 && (
+      <dl class="mt-5 mb-0 flex flex-wrap gap-x-8 gap-y-3">
+        {metrics.map((m) => (
+          <div>
+            <dt class="text-micro text-stone m-0">{m.label}</dt>
+            <dd class="text-sm font-semibold text-ink m-0 mt-0.5 font-mono tabular-nums">
+              {m.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    )
+  }
+
+  <ul class="flex flex-wrap gap-2 list-none m-0 mt-5 p-0">
     {
-      metrics.length > 0 && (
-        <dl class="mt-4 mb-0 flex flex-col gap-1">
-          {metrics.map((m) => (
-            <div class="flex items-baseline gap-3 font-mono text-xs">
-              <dt class="text-faint truncate">{m.label}</dt>
-              <span class="flex-1 border-b border-dotted border-rule translate-y-[-0.2em]" />
-              <dd class="text-fg m-0 whitespace-nowrap">{m.value}</dd>
-            </div>
-          ))}
-        </dl>
-      )
+      stack.map((s) => (
+        <li class="text-micro text-steel border border-hairline rounded-full px-2.5 py-1">{s}</li>
+      ))
     }
-
-    <ul class="flex flex-wrap gap-x-3 gap-y-1 list-none m-0 mt-4 p-0">
-      {stack.map((s) => <li class="font-mono text-2xs text-faint">{s}</li>)}
-    </ul>
-  </div>
+  </ul>
 </article>

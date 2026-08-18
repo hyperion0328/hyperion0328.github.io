@@ -14,28 +14,30 @@ const { results } = Astro.props;
 
 {/* 좁은 화면에서 표가 본문을 밀어내지 않도록 표 자체만 가로 스크롤시킨다 */}
 <div class="overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0">
-  <table class="w-full border-collapse text-sm min-w-[36rem]">
+  <table
+    class="w-full border-collapse text-sm min-w-[36rem] border border-hairline rounded-md overflow-hidden"
+  >
     <caption class="sr-only">측정 지표와 각 지표의 측정 조건</caption>
     <thead>
-      <tr class="border-y border-border text-left">
-        <th scope="col" class="font-mono text-2xs font-medium text-faint py-2 pr-4 w-8">#</th>
-        <th scope="col" class="font-mono text-2xs font-medium text-faint py-2 pr-4">지표</th>
-        <th scope="col" class="font-mono text-2xs font-medium text-faint py-2 pr-4">값</th>
-        <th scope="col" class="font-mono text-2xs font-medium text-faint py-2">측정 조건</th>
+      <tr class="bg-surface text-left">
+        <th scope="col" class="text-caption font-semibold text-steel py-2 pr-4 w-8">#</th>
+        <th scope="col" class="text-caption font-semibold text-steel py-2 pr-4">지표</th>
+        <th scope="col" class="text-caption font-semibold text-steel py-2 pr-4">값</th>
+        <th scope="col" class="text-caption font-semibold text-steel py-2">측정 조건</th>
       </tr>
     </thead>
     <tbody>
       {
         results.map((r, i) => (
-          <tr class="border-b border-border align-top">
-            <td class="font-mono text-2xs text-faint py-3 pr-4 tabular-nums">
+          <tr class="border-b border-hairline-soft align-top">
+            <td class="font-mono text-micro text-stone py-3 pr-4 tabular-nums">
               {String(i + 1).padStart(2, '0')}
             </td>
-            <th scope="row" class="py-3 pr-4 font-normal text-fg text-left">
+            <th scope="row" class="py-3 pr-4 font-normal text-ink text-left">
               {r.label}
             </th>
-            <td class="py-3 pr-4 font-mono text-fg whitespace-nowrap tabular-nums">{r.value}</td>
-            <td class="py-3 text-muted text-xs">{r.condition}</td>
+            <td class="py-3 pr-4 font-mono text-ink whitespace-nowrap tabular-nums">{r.value}</td>
+            <td class="py-3 text-charcoal text-caption">{r.condition}</td>
           </tr>
         ))
       }

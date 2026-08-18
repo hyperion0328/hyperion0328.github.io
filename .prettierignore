@@ -2,3 +2,6 @@ dist/
 .astro/
 node_modules/
 pnpm-lock.yaml
+
+# 외부에서 받은 디자인 스펙 — 원본 그대로 보존한다
+DESIGN-minimax.md

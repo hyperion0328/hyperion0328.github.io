@@ -1,72 +1,125 @@
 @import 'tailwindcss';
 
 /*
-  JetBrains Mono — 라틴 글립만 자체 호스팅한다(가변, 약 40KB).
-  unicode-range 가 라틴으로 한정돼 있어서 한글은 이 파일을 내려받지 않고
-  시스템 산세리프로 자동 폴백된다. 숫자·지표명·경로는 모노로, 한글 본문은
-  읽기 좋은 산세리프로 나뉜다.
-  CDN 핫링크 금지 규칙에 따라 public/fonts/ 에서 직접 서빙한다.
+  G마켓 산스 — MiniMax 디자인 시스템의 '단일 서체' 원칙을 따라 모든 표면에 이 서체만 쓴다.
+  원본(가중치당 330~365KB)을 KS X 1001 완성형 2,350자 + 라틴 + 기호로 서브셋해
+  가중치당 약 100KB 로 줄였다. CDN 핫링크 금지 규칙에 따라 public/fonts/ 에서 직접 서빙한다.
+
+  G마켓 산스는 Light(300)/Medium(500)/Bold(700) 세 가지만 있다.
+  MiniMax 가 쓰는 400·500 은 Medium 으로, 600·700 은 Bold 로 맞춘다.
 */
 @font-face {
-  font-family: 'JetBrains Mono Variable';
+  font-family: 'Gmarket Sans';
   font-style: normal;
+  font-weight: 400 500;
   font-display: swap;
-  font-weight: 100 800;
-  src: url('/fonts/jetbrains-mono-latin-var.woff2') format('woff2-variations');
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src: url('/fonts/gmarket-sans-medium.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Gmarket Sans';
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url('/fonts/gmarket-sans-bold.woff2') format('woff2');
 }
 
 /*
   디자인 토큰 — 색상과 폰트 크기는 반드시 여기에서만 정의한다.
   컴포넌트에서 #hex 나 임의 px 값을 직접 쓰지 않는다.
+  값의 출처는 DESIGN-minimax.md 이며 토큰 이름을 그 문서와 맞춘다.
 */
 @theme {
-  /* 색 — 라이트 기준값. 본문 색은 전부 배경 대비 4.5:1 이상을 지킨다. */
-  --color-bg: #ffffff;
-  --color-surface: #fafafa;
-  --color-border: #e4e4e7;
-  --color-rule: #d4d4d8;
-  --color-fg: #18181b;
-  --color-muted: #3f3f46;
-  --color-faint: #6b6b74;
+  /* 색 — 라이트가 기준값. MiniMax 는 순백 캔버스에 근검정 잉크가 정체성이다. */
+  --color-canvas: #ffffff;
+  --color-surface: #f7f8fa;
+  --color-surface-soft: #f2f3f5;
+  --color-hairline: #e5e7eb;
+  --color-hairline-soft: #eaecf0;
+
+  --color-ink: #0a0a0a;
+  --color-charcoal: #222222;
+  --color-slate: #45515e;
+  --color-steel: #5f5f5f;
+  /*
+    문서의 stone 은 #8e8e93 이지만 흰 배경에서 3.26:1 이라 본문 기준(4.5:1)에 못 미친다.
+    이 사이트는 12~13px 라벨에 이 색을 쓰므로 4.95:1 이 되도록 어둡게 조정했다.
+  */
+  --color-stone: #6e7076;
+  /* 푸터는 라이트·다크 모두 어두운 배경이라 보조 텍스트 색을 따로 둔다 */
+  --color-on-dark-muted: #9a9aa0;
+
+  /* 검정 알약 CTA — 이 시스템에서 가장 알아보기 쉬운 상호작용 요소 */
+  --color-primary: #0a0a0a;
+  --color-on-primary: #ffffff;
+  --color-primary-pressed: #222222;
+
+  /* 브랜드색은 제품 정체성 전용. 링크·강조에만 blue-deep 을 쓴다. */
   --color-accent: #1d4ed8;
-  --color-accent-fg: #ffffff;
+  --color-brand-coral: #ff5530;
+
+  --color-footer-bg: #0a0a0a;
+  --color-on-dark: #ffffff;
 
   --font-sans:
-    -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', 'Malgun Gothic',
+    'Gmarket Sans', -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', 'Malgun Gothic',
     'Apple SD Gothic Neo', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-mono:
-    'JetBrains Mono Variable', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
-    'Malgun Gothic', 'Apple SD Gothic Neo', monospace;
+  /*
+    두 번째 웹폰트는 들이지 않는다(MiniMax 원칙). 코드와 지표 수치에만
+    시스템 모노스페이스를 쓴다 — 표에서 자릿수를 맞추기 위해서다.
+  */
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 
-  --text-2xs: 0.6875rem;
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.375rem;
-  --text-2xl: 1.75rem;
-  --text-3xl: 2.25rem;
+  /* 타입 스케일 — DESIGN-minimax.md 의 px 값을 rem 으로 옮겼다 */
+  --text-micro: 0.75rem; /* 12 */
+  --text-caption: 0.8125rem; /* 13 */
+  --text-sm: 0.875rem; /* 14 */
+  --text-base: 1rem; /* 16 */
+  --text-subtitle: 1.125rem; /* 18 */
+  --text-card: 1.25rem; /* 20 */
+  --text-heading-sm: 1.5rem; /* 24 */
+  --text-heading-md: 2rem; /* 32 */
+  --text-heading-lg: 2.5rem; /* 40 */
+  --text-display: 3.5rem; /* 56 */
+  --text-hero: 5rem; /* 80 */
 
-  --radius-card: 0.25rem;
+  /* 모서리 — 알약 버튼과 32px 히어로 카드가 이 시스템의 서명이다 */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-xxl: 20px;
+  --radius-xxxl: 24px;
+  --radius-hero: 32px;
 }
 
 /*
-  다크 모드 — 토큰 값만 교체한다. 컴포넌트는 손대지 않는다.
+  다크 모드 — MiniMax 문서에는 다크 팔레트가 없다(Known Gaps 에 명시).
+  브랜드의 근검정(#0a0a0a)을 캔버스로 뒤집어 도출했고,
+  본문 색은 전부 배경 대비 4.5:1 이상을 확인했다.
 */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #0a0a0b;
-    --color-surface: #141417;
-    --color-border: #26262a;
-    --color-rule: #35353b;
-    --color-fg: #f4f4f5;
-    --color-muted: #b4b4bd;
-    --color-faint: #8b8b95;
+    --color-canvas: #0a0a0a;
+    --color-surface: #151517;
+    --color-surface-soft: #1b1b1e;
+    --color-hairline: #2c2c30;
+    --color-hairline-soft: #232326;
+
+    --color-ink: #ffffff;
+    --color-charcoal: #e2e2e5;
+    --color-slate: #c2c6cc;
+    --color-steel: #a9a9ae;
+    --color-stone: #9a9aa0;
+
+    /* 어두운 캔버스에서는 알약을 흰색으로 뒤집는다 */
+    --color-primary: #ffffff;
+    --color-on-primary: #0a0a0a;
+    --color-primary-pressed: #e2e2e5;
+
     --color-accent: #7ab5ff;
-    --color-accent-fg: #0a0a0b;
+
+    --color-footer-bg: #151517;
   }
 }
 
@@ -82,10 +135,11 @@ html {
 }
 
 body {
-  background-color: var(--color-bg);
-  color: var(--color-fg);
+  background-color: var(--color-canvas);
+  color: var(--color-charcoal);
   font-family: var(--font-sans);
-  line-height: 1.65;
+  font-size: var(--text-base);
+  line-height: 1.5; /* MiniMax body-md */
   word-break: keep-all; /* 한글 단어 중간에서 줄바꿈되지 않게 */
   overflow-wrap: anywhere;
 }
@@ -97,56 +151,119 @@ body {
 }
 
 /*
-  섹션 라벨 — 모노 대문자에 앞머리 표식을 붙여 기록물 느낌을 준다.
-  표식은 장식이므로 스크린리더가 읽지 않도록 aria-hidden 대신
-  ::before 로 넣는다(생성 콘텐츠는 대부분의 리더가 건너뛴다).
+  디스플레이 타이포 — 큰 크기일수록 자간을 좁히는 것이 이 시스템의 특징이다.
+  한글은 라틴만큼 좁히면 뭉치므로 문서의 -2px 를 -0.02em 수준으로 완화했다.
 */
-.section-label {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-faint);
+.type-hero {
+  font-size: var(--text-heading-md);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
 }
-.section-label::before {
-  content: '// ';
-  color: var(--color-rule);
+.type-display {
+  font-size: var(--text-heading-sm);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+}
+@media (min-width: 768px) {
+  .type-hero {
+    font-size: var(--text-display);
+    line-height: 1.1;
+  }
+  .type-display {
+    font-size: var(--text-heading-lg);
+  }
+}
+
+/* 알약 버튼 — 이 시스템에서 버튼은 예외 없이 완전한 알약이다 */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 11px 24px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: none;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+.pill-primary {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.pill-primary:active {
+  background-color: var(--color-primary-pressed);
+}
+.pill-secondary {
+  background-color: transparent;
+  color: var(--color-ink);
+  border: 1px solid var(--color-ink);
+}
+.pill-tertiary {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  border: 1px solid var(--color-hairline);
+}
+
+/* 섹션 라벨 — 13px 볼드 소문자. 문서의 caption-bold 역할이다. */
+.section-label {
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-stone);
+}
+
+/* 카드 — 평평하게 두고 1px 헤어라인으로만 구분한다(문서의 elevation 0) */
+.card {
+  background-color: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  padding: 24px;
 }
 
 /* 본문 마크다운 — 프로젝트 상세의 '접근 방법' 영역 */
 .prose-body :where(h2) {
-  font-size: var(--text-lg);
+  font-size: var(--text-heading-sm);
   font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-ink);
   margin-block: 2rem 0.75rem;
 }
 .prose-body :where(h3) {
-  font-family: var(--font-mono);
-  font-size: var(--text-base);
+  font-size: var(--text-card);
   font-weight: 600;
-  letter-spacing: -0.01em;
+  line-height: 1.4;
+  color: var(--color-ink);
   margin-block: 2rem 0.5rem;
   padding-top: 1.25rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-hairline);
 }
 .prose-body :where(p) {
   margin-block: 0.75rem;
-  color: var(--color-muted);
+  color: var(--color-charcoal);
+  line-height: 1.6;
 }
 .prose-body :where(ul, ol) {
   margin-block: 0.75rem;
   padding-inline-start: 1.25rem;
-  color: var(--color-muted);
+  color: var(--color-charcoal);
 }
 .prose-body :where(li) {
   margin-block: 0.375rem;
 }
 .prose-body :where(li)::marker {
-  color: var(--color-rule);
+  color: var(--color-stone);
 }
 .prose-body :where(strong) {
-  color: var(--color-fg);
-  font-weight: 600;
+  color: var(--color-ink);
+  font-weight: 700;
 }
 .prose-body :where(a) {
   color: var(--color-accent);
@@ -157,7 +274,6 @@ body {
   font-family: var(--font-mono);
   font-size: 0.9em;
   background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 3px;
+  border-radius: var(--radius-xs);
   padding: 0.1em 0.35em;
 }
