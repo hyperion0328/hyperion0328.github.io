@@ -1,0 +1,112 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const works = (await getCollection('motion', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+/*
+  쇼릴은 src/assets/motion/showreel.mp4 에 둔다(public/ 이 아니다).
+  src 에 두면 빌드 때 파일명에 해시가 붙어 영상을 교체해도 캐시가 확실히 갱신된다.
+
+  파일이 아직 없어도 빌드가 깨지면 안 되므로 import 대신 glob 으로 받는다 —
+  매칭되는 파일이 없으면 빈 객체가 와서 아래 분기가 안내 문구를 대신 내보낸다.
+  poster 도 마찬가지로 선택적이다. 없으면 브라우저가 첫 프레임을 쓴다.
+*/
+const pick = (mod: Record<string, unknown>) => Object.values(mod)[0] as string | undefined;
+
+const SHOWREEL = pick(
+  import.meta.glob('../../assets/motion/showreel.mp4', {
+    eager: true,
+    query: '?url',
+    import: 'default',
+  }),
+);
+const POSTER = pick(
+  import.meta.glob('../../assets/motion/showreel-poster.{jpg,png}', {
+    eager: true,
+    query: '?url',
+    import: 'default',
+  }),
+);
+---
+
+<BaseLayout
+  title="모션그래픽 — 박현민"
+  description="영상디자인 전공 과정에서 제작한 2D·3D 모션그래픽 작업. 쇼릴과 작품별 컨셉, 사용 툴, 길이를 정리했습니다."
+>
+  <h1 class="text-heading-md font-semibold tracking-tight m-0">모션그래픽</h1>
+  <p class="text-charcoal mt-2 mb-0">
+    영상디자인 전공 과정에서 제작한 작업입니다. 모두 기획과 스토리보드부터 제작까지 직접
+    진행했습니다.
+  </p>
+  <p class="font-mono text-micro text-stone mt-3 mb-0">{works.length} works</p>
+
+  {
+    SHOWREEL ? (
+      <figure class="mt-8 mb-0">
+        {/*
+          preload="none" — 재생 버튼을 누르기 전까지 내려받지 않는다.
+          이 페이지의 초기 전송량은 포스터 이미지까지만이다.
+        */}
+        <video
+          class="w-full rounded-xl border border-hairline bg-surface"
+          controls
+          playsinline
+          preload="none"
+          poster={POSTER}
+        >
+          <source src={SHOWREEL} type="video/mp4" />이 브라우저는 video 태그를 지원하지 않습니다.
+          <a href={SHOWREEL}>쇼릴 내려받기</a>
+        </video>
+        <figcaption class="font-mono text-micro text-stone mt-2">
+          showreel — 전공 과정 작업 모음 (1분) · 아래는 그중 4편
+        </figcaption>
+      </figure>
+    ) : (
+      <p class="mt-8 mb-0 text-sm text-stone border border-hairline rounded-xl px-4 py-3">
+        쇼릴 영상 준비 중입니다. 아래에서 작업별 내용을 확인하실 수 있습니다.
+      </p>
+    )
+  }
+
+  <ul class="mt-10 flex flex-col gap-10 list-none m-0 p-0">
+    {
+      works.map((w, i) => (
+        <li class="border-t border-hairline pt-8 first:border-t-0 first:pt-0">
+          <div class="flex items-baseline gap-3">
+            <span class="font-mono text-micro text-stone">{String(i + 1).padStart(2, '0')}</span>
+            <h2 class="text-subtitle font-semibold tracking-tight m-0">{w.data.title}</h2>
+          </div>
+          <p class="font-mono text-micro text-stone mt-1 mb-0">{w.data.context}</p>
+
+          <Image
+            src={w.data.still}
+            alt={w.data.stillAlt}
+            widths={[560, 1120]}
+            sizes="(min-width: 768px) 42rem, 100vw"
+            class="w-full h-auto rounded-xl border border-hairline mt-4"
+          />
+
+          <p class="text-charcoal text-sm mt-4 mb-0">{w.data.concept}</p>
+
+          <dl class="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-3 mt-5 mb-0">
+            {[
+              ['형식', w.data.kind],
+              ['툴', w.data.tools.join(', ')],
+              ['길이', w.data.duration],
+              ['기여', w.data.contribution],
+            ].map(([label, value]) => (
+              <div>
+                <dt class="font-mono text-micro text-stone m-0">{label}</dt>
+                <dd class="text-sm text-ink m-0 mt-0.5">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

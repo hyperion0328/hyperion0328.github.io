@@ -25,3 +25,8 @@ Desktop.ini
 # OMC 운영 산출물
 .omc/
 !.omc/skills/
+
+# 영상 원본 — 웹용으로 인코딩한 src/assets/motion/showreel.mp4 만 커밋한다.
+# 48MB 짜리 원본이 들어가면 히스토리에서 지울 수 없다.
+/*.mp4
+/*.mov
