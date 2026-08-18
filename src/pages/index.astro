@@ -1,46 +1,81 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
+import { education, credentials, tools, training, work, email, type Row } from '../data/resume';
 
-const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
-  (a, b) => a.data.order - b.data.order,
-);
+/* 이력 표는 형태가 같아 한 곳에서 그린다. */
+const sections: { label: string; rows: Row[] }[] = [
+  { label: 'education', rows: education },
+  { label: 'work', rows: work },
+  { label: 'certifications & awards', rows: credentials },
+  { label: 'training', rows: training },
+];
 ---
 
 <BaseLayout
   title="박현민 — AI/ML 포트폴리오"
   description="컴퓨터 비전 중심의 AI/ML 프로젝트 포트폴리오. 측정 조건을 밝힌 실측 결과와 판단 근거를 남깁니다."
 >
-  <section>
-    <p class="font-mono text-2xs text-faint m-0 tracking-widest">PARK HYUNMIN</p>
-    <h1 class="text-3xl font-semibold tracking-tight mt-1 mb-0">박현민</h1>
-    <p class="font-mono text-xs text-faint mt-2 mb-0">computer vision · AI/ML</p>
-
-    <p class="text-lg text-muted mt-6 mb-0">
-      컴퓨터 비전을 공부하는 AI/ML 전공생입니다. 모델을 돌려 점수를 얻는 것보다,
-      <strong class="text-fg font-medium">그 점수가 어떤 조건에서 나왔고 어디서 무너지는지</strong>
-      를 재는 데 시간을 씁니다.
+  {/* MiniMax hero-band-marketing — 대형 디스플레이 + 부제 + 알약 CTA 한 쌍 */}
+  <section class="py-8 md:py-16">
+    <p class="section-label m-0">Park Hyeon Min</p>
+    <h1 class="type-hero mt-4 mb-0">
+      남들이 놓치는 것까지<br />확인합니다
+    </h1>
+    <p class="text-subtitle text-slate mt-6 mb-0 max-w-xl">
+      <strong class="text-ink font-semibold"
+        >괜찮아 보이는 결과일수록 조건을 바꿔 다시 봅니다.</strong
+      >
+      그래야 어디까지 되고 어디서부터 안 되는지 알 수 있다고 생각합니다.
     </p>
+
+    <div class="flex flex-wrap gap-3 mt-8">
+      <a href="/projects/" class="pill pill-primary">프로젝트 보기</a>
+      <a href="/motion/" class="pill pill-secondary">모션그래픽 보기</a>
+    </div>
+  </section>
+
+  {
+    sections.map((s) => (
+      <section class="mt-14">
+        <h2 class="section-label">{s.label}</h2>
+        <ul class="mt-4 flex flex-col gap-4 list-none m-0 p-0">
+          {s.rows.map((r) => (
+            <li class="sm:flex sm:gap-5">
+              <p class="font-mono text-micro text-stone m-0 sm:w-40 sm:shrink-0 sm:pt-1">
+                {r.period}
+              </p>
+              <div class="mt-0.5 sm:mt-0">
+                <p class="text-sm text-ink m-0">
+                  {r.title}
+                  {r.note && <span class="text-stone font-normal"> — {r.note}</span>}
+                </p>
+                {r.detail && <p class="text-sm text-charcoal m-0 mt-0.5">{r.detail}</p>}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+
+  <section class="mt-14">
+    <h2 class="section-label">tools</h2>
+    <dl class="mt-4 flex flex-col gap-3 m-0">
+      {
+        tools.map((t) => (
+          <div class="flex gap-4 items-baseline">
+            <dt class="font-mono text-micro text-stone shrink-0 w-8">{t.level}</dt>
+            <dd class="text-sm text-ink m-0">{t.items.join(' · ')}</dd>
+          </div>
+        ))
+      }
+    </dl>
   </section>
 
   <section class="mt-14">
-    <h2 class="section-label">projects</h2>
-    <div class="mt-4 flex flex-col gap-4">
-      {
-        projects.map((p, i) => (
-          <ProjectCard
-            index={i + 1}
-            href={`/projects/${p.id}/`}
-            slug={p.id}
-            title={p.data.title}
-            tagline={p.data.tagline}
-            period={p.data.period}
-            stack={p.data.stack}
-            metrics={p.data.results.slice(0, 3).map((r) => ({ label: r.label, value: r.value }))}
-          />
-        ))
-      }
-    </div>
+    <h2 class="section-label">contact</h2>
+    <p class="mt-4 mb-0 text-sm">
+      <a href={`mailto:${email}`} class="text-accent">{email}</a>
+    </p>
   </section>
 </BaseLayout>
