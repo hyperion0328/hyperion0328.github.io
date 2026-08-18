@@ -38,15 +38,18 @@ const projects = defineCollection({
       // 4) 배운 점
       learned: z.array(z.string()).nonempty(),
       // 5) 링크
+      /*
+        링크가 하나도 없는 프로젝트(저장소 비공개 등)는 linksNote 로 이유를 밝혀야 한다.
+        열리지 않는 링크를 거는 것보다 없는 이유를 적는 편이 낫다.
+      */
       links: z
         .object({
           github: z.url().optional(),
           demo: z.url().optional(),
           docs: z.url().optional(),
         })
-        .refine((l) => l.github || l.demo || l.docs, {
-          message: '링크가 최소 하나는 있어야 한다',
-        }),
+        .default({}),
+      linksNote: z.string().optional(),
 
       // 결과 아래에 붙는 이미지. alt 는 접근성상 필수라 optional 로 두지 않는다.
       figures: z
@@ -64,4 +67,31 @@ const projects = defineCollection({
     }),
 });
 
-export const collections = { projects };
+/*
+  영상 작업은 mAP 같은 측정 수치가 없다. projects 스키마에 억지로 넣으면
+  results 필수 규칙을 풀어야 하고 그러면 위의 수치 검증 장치가 무력해진다.
+  그래서 컬렉션을 분리하고, 여기서는 대신 제작 조건(툴·길이·기여도)을 필수로 둔다.
+*/
+const motion = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/motion' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      // 브랜드를 소재로 한 전공 과제다. 실제 발주 작업으로 읽히면 안 되므로 필수로 둔다.
+      context: z.string().min(1, '과제/발주 등 작업 성격을 반드시 밝혀야 한다'),
+      kind: z.enum(['2D 모션', '3D 모델링 & 모션']),
+      // summary·concept 는 포트폴리오 PDF 의 문장을 그대로 옮긴다. 임의로 다시 쓰지 않는다.
+      summary: z.string().min(1),
+      concept: z.string().min(1),
+      tools: z.array(z.string()).nonempty(),
+      year: z.string(),
+      duration: z.string(),
+      contribution: z.string(),
+      still: image(),
+      stillAlt: z.string().min(1, '모든 이미지에는 alt 가 있어야 한다'),
+      order: z.number().default(99),
+      draft: z.boolean().default(false),
+    }),
+});
+
+export const collections = { projects, motion };

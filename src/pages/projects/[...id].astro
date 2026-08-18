@@ -34,16 +34,16 @@ const meta = [
 <BaseLayout title={`${d.title} — 박현민`} description={d.tagline}>
   <article>
     <header>
-      <p class="font-mono text-2xs text-faint m-0">{project.id}</p>
-      <h1 class="text-2xl font-semibold tracking-tight mt-1 mb-0">{d.title}</h1>
-      <p class="text-muted mt-2 mb-0">{d.tagline}</p>
+      <p class="font-mono text-micro text-stone m-0">{project.id}</p>
+      <h1 class="text-heading-md font-semibold tracking-tight mt-1 mb-0">{d.title}</h1>
+      <p class="text-charcoal mt-2 mb-0">{d.tagline}</p>
 
-      <dl class="mt-6 flex flex-col gap-1.5 m-0 border-t border-border pt-4">
+      <dl class="mt-6 flex flex-col gap-1.5 m-0 border-t border-hairline pt-4">
         {
           meta.map((m) => (
-            <div class="grid grid-cols-[4.5rem_1fr] gap-3 font-mono text-xs">
-              <dt class="text-faint">{m.k}</dt>
-              <dd class="text-fg m-0">{m.v}</dd>
+            <div class="grid grid-cols-[4.5rem_1fr] gap-3 font-mono text-caption">
+              <dt class="text-stone">{m.k}</dt>
+              <dd class="text-ink m-0">{m.v}</dd>
             </div>
           ))
         }
@@ -53,7 +53,7 @@ const meta = [
     {/* 1. 문제 정의 */}
     <section class="mt-14">
       <h2 class="section-label">problem</h2>
-      <p class="mt-3 mb-0 text-fg">{d.problem}</p>
+      <p class="mt-3 mb-0 text-ink">{d.problem}</p>
     </section>
 
     {/* 2. 접근 방법 — 본문 마크다운 */}
@@ -72,7 +72,9 @@ const meta = [
       </div>
       {
         d.resultsNote && (
-          <p class="text-sm text-muted mt-5 mb-0 border-l-2 border-rule pl-3">{d.resultsNote}</p>
+          <p class="text-sm text-charcoal mt-5 mb-0 border-l-2 border-hairline pl-3">
+            {d.resultsNote}
+          </p>
         )
       }
 
@@ -88,10 +90,10 @@ const meta = [
                   sizes="(min-width: 768px) 42rem, 100vw"
                   loading="lazy"
                   decoding="async"
-                  class="w-full h-auto rounded-[--radius-card] border border-border bg-surface"
+                  class="w-full h-auto rounded-[--radius-card] border border-hairline bg-surface"
                 />
                 {f.caption && (
-                  <figcaption class="font-mono text-2xs text-faint mt-2 leading-relaxed">
+                  <figcaption class="font-mono text-micro text-stone mt-2 leading-relaxed">
                     {f.caption}
                   </figcaption>
                 )}
@@ -109,10 +111,10 @@ const meta = [
         {
           d.learned.map((l, i) => (
             <li class="grid grid-cols-[2rem_1fr] gap-2">
-              <span class="font-mono text-2xs text-faint pt-1 tabular-nums">
+              <span class="font-mono text-micro text-stone pt-1 tabular-nums">
                 {String(i + 1).padStart(2, '0')}
               </span>
-              <span class="text-muted">{l}</span>
+              <span class="text-charcoal">{l}</span>
             </li>
           ))
         }
@@ -125,8 +127,8 @@ const meta = [
       <ul class="mt-3 mb-0 flex flex-col gap-1.5 list-none p-0">
         {
           linkList.map((l) => (
-            <li class="grid grid-cols-[4.5rem_1fr] gap-3 font-mono text-xs">
-              <span class="text-faint">{l.label}</span>
+            <li class="grid grid-cols-[4.5rem_1fr] gap-3 font-mono text-caption">
+              <span class="text-stone">{l.label}</span>
               <a
                 href={l.href}
                 class="text-accent underline underline-offset-4 break-all"
@@ -139,10 +141,11 @@ const meta = [
           ))
         }
       </ul>
+      {d.linksNote && <p class="text-sm text-steel mt-3 mb-0">{d.linksNote}</p>}
     </section>
 
-    <nav class="mt-16 pt-6 border-t border-border">
-      <a href="/projects/" class="font-mono text-xs text-faint no-underline hover:text-fg">
+    <nav class="mt-16 pt-6 border-t border-hairline">
+      <a href="/projects/" class="font-mono text-caption text-stone no-underline hover:text-ink">
         ← ~/projects
       </a>
     </nav>

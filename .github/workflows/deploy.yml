@@ -1,16 +1,8 @@
 name: Deploy to GitHub Pages
 
 on:
-  # 저장소가 private 인 동안에는 GitHub Pages 가 유료 플랜에서만 동작하므로
-  # 자동 배포를 꺼 둔다. 매 push 마다 deploy job 이 실패해 알림이 쌓이는 것을 막기 위함.
-  #
-  # 사이트를 공개할 때 할 일:
-  #   1. 저장소를 public 으로 전환
-  #   2. Settings > Pages > Source 를 "GitHub Actions" 로 설정
-  #   3. 아래 3줄의 주석을 해제
-  #
-  # push:
-  #   branches: [main]
+  push:
+    branches: [main]
   workflow_dispatch:
 
 # GitHub Pages 배포에 필요한 최소 권한

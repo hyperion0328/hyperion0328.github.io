@@ -12,11 +12,11 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
   title="프로젝트 — 박현민"
   description="컴퓨터 비전 프로젝트 목록. 각 페이지는 문제 정의, 접근 방법, 측정 조건을 밝힌 결과, 배운 점 순서로 정리했습니다."
 >
-  <h1 class="text-2xl font-semibold tracking-tight m-0">프로젝트</h1>
-  <p class="text-muted mt-2 mb-0">
+  <h1 class="text-heading-md font-semibold tracking-tight m-0">프로젝트</h1>
+  <p class="text-charcoal mt-2 mb-0">
     각 페이지는 문제 정의 → 접근 방법 → 결과 → 배운 점 → 링크 순서로 정리했습니다.
   </p>
-  <p class="font-mono text-2xs text-faint mt-3 mb-0">{projects.length} entries</p>
+  <p class="font-mono text-micro text-stone mt-3 mb-0">{projects.length} entries</p>
 
   <div class="mt-8 flex flex-col gap-4">
     {
